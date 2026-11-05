@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+@source '../**/*.blade.php';
+@source '../js/**/*.{ts,tsx}';
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('../fonts/Satoshi-Variable.woff2') format('woff2');
+    font-weight: 300 900;
+    font-display: swap;
+}
+
+/* shadcn token names so Glint UI components drop in unchanged. Palette: deep navy + azure on warm cream. */
+:root {
+    --radius: 1rem;
+    --background: #f5f8fc;
+    --foreground: #0b1a33;
+    --card: #ffffff;
+    --card-foreground: #0b1a33;
+    --popover: #ffffff;
+    --popover-foreground: #0b1a33;
+    --primary: #0b2a5c;
+    --primary-foreground: #ffffff;
+    --secondary: #e4efff;
+    --secondary-foreground: #0b2a5c;
+    --muted: #edf1f7;
+    --muted-foreground: #5a6578;
+    --accent: #7cc4ff;
+    --accent-foreground: #0b2a5c;
+    --destructive: #d93f2b;
+    --border: #dfe6f0;
+    --input: #d5deea;
+    --ring: #2563eb;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: calc(var(--radius) - 8px);
+    --radius-md: calc(var(--radius) - 6px);
+    --radius-lg: calc(var(--radius) - 4px);
+    --radius-xl: var(--radius);
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Satoshi', 'Poppins', ui-sans-serif, sans-serif;
+}
+
+@theme {
+    --color-navy: #0b2a5c;
+    --color-navy-deep: #061a3d;
+    --color-navy-soft: #163f86;
+    --color-azure: #7cc4ff;
+    --color-azure-soft: #dcecff;
+    --color-cream: #f5f8fc;
+}
+
+@layer base {
+    * {
+        border-color: var(--border);
+    }
+    html {
+        background: var(--background);
+        color: var(--foreground);
+        scroll-behavior: smooth;
+    }
+    /* Decorative rails and glows reach past the viewport; clip (not hidden) so sticky elements keep working. */
+    html,
+    body {
+        overflow-x: clip;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+    }
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+}
+
+@utility container-page {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    @media (width >= 48rem) {
+        padding-inline: 2rem;
+    }
+}
+
+/* Small "✱ Our approach" eyebrow above section titles. */
+@utility eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--card);
+    border: 1px solid var(--border);
+}
+
+@keyframes promo-fill {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes glow-drift {
+    to {
+        transform: translate(-6rem, 5rem) scale(1.15);
+    }
+}
