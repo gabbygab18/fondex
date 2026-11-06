@@ -17,12 +17,28 @@ class DatabaseSeeder extends Seeder
             ['code' => 'CO', 'name' => 'Colombia', 'currency' => 'COP', 'min_amount' => 200000, 'max_amount' => 10000000, 'starting_limit' => 5000000, 'limit_increase_pct' => 50, 'min_term' => 1, 'max_term' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
-        User::create(['name' => 'Admin', 'email' => 'admin@fondex.test', 'password' => 'password', 'role' => 'admin', 'locale' => 'en']);
-        User::create(['name' => 'Laura Gómez', 'email' => 'staff@fondex.test', 'password' => 'password', 'role' => 'staff']);
-
+        // Live site: ask for the real admin login instead of the demo one, and no demo staff or borrowers.
         if (! app()->isLocal()) {
+            // Ask again until filled in (a blank answer would fail on insert).
+            $ask = function (string $q, callable $ok, bool $secret = false) {
+                do {
+                    $v = trim((string) ($secret ? $this->command->secret($q) : $this->command->ask($q)));
+                } while (! $ok($v) && ! $this->command->error('Try again.'));
+
+                return $v;
+            };
+            User::create([
+                'name' => $this->command->ask('Admin name', 'Admin'),
+                'email' => $ask('Admin email', fn ($v) => filter_var($v, FILTER_VALIDATE_EMAIL)),
+                'password' => $ask('Admin password (12+ characters)', fn ($v) => strlen($v) >= 12, true),
+                'role' => 'admin', 'locale' => 'es',
+            ]);
+
             return;
         }
+
+        User::create(['name' => 'Admin', 'email' => 'admin@fondex.test', 'password' => 'password', 'role' => 'admin', 'locale' => 'en']);
+        User::create(['name' => 'Laura Gómez', 'email' => 'staff@fondex.test', 'password' => 'password', 'role' => 'staff']);
 
         // Demo borrowers so the admin portal has something to show.
         // [name, country, amount, months, frequency, loan type, status, days ago, rate if approved]
