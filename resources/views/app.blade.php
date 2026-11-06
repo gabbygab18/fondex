@@ -1,6 +1,6 @@
 @php($seo = \App\Support\Seo::for($page))
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" data-country="{{ \App\Support\VisitorCountry::for(request()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

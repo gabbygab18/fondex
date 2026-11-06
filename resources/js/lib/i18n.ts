@@ -23,7 +23,10 @@ export function localCountries<T extends { code: string }>(countries: T[]): T[] 
     return mine.length ? mine : countries;
 }
 
-/** Time zones closer to Colombia: Colombia, its neighbours, Central America, the Caribbean and Mexico. */
+/** Countries closer to Colombia than to Argentina: its neighbours, Central America, Mexico and the Caribbean. */
+const NEAR_CO_COUNTRIES = new Set(['CO', 'VE', 'EC', 'PE', 'PA', 'CR', 'NI', 'HN', 'SV', 'GT', 'BZ', 'MX', 'CU', 'JM', 'DO', 'PR', 'HT', 'TT', 'CW', 'AW', 'BB', 'GY', 'SR']);
+
+/** Time zones closer to Colombia, for when the IP lookup gave nothing. */
 const NEAR_CO = new Set([
     'America/Bogota', 'America/Caracas', 'America/Guayaquil', 'Pacific/Galapagos', 'America/Lima', 'America/Panama',
     'America/Manaus', 'America/Boa_Vista', 'America/Porto_Velho', 'America/Rio_Branco', 'America/Eirunepe',
@@ -33,8 +36,11 @@ const NEAR_CO = new Set([
     'America/Port_of_Spain', 'America/Curacao', 'America/Aruba', 'America/Barbados', 'America/Guyana', 'America/Paramaribo',
 ]);
 
-/** Visitor's country from the browser time zone (no IP lookup), mapped to the nearest country we lend in. */
+/** Visitor's country (IP first, then browser time zone), mapped to the nearest country we lend in. */
 export function visitorCountry(): 'AR' | 'CO' {
+    // From the visitor's IP, looked up on the server (App\Support\VisitorCountry); a VPN counts.
+    const ip = document.documentElement.dataset.country;
+    if (ip) return NEAR_CO_COUNTRIES.has(ip) ? 'CO' : 'AR';
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
     // Colombia and nearby countries see COP; Argentina, the Southern Cone (Uruguay, Chile, Paraguay,
     // Bolivia, southern Brazil) and everyone else see ARS, the main market (fondex.com.ar).
