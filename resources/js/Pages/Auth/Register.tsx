@@ -10,7 +10,7 @@ import { useT, visitorCountry } from '@/lib/i18n';
 
 export default function Register() {
     const t = useT();
-    const form = useForm({ name: '', email: '', phone: '', country: (visitorCountry() ?? 'CO') as string, password: '', password_confirmation: '' });
+    const form = useForm({ name: '', email: '', phone: '', country: visitorCountry() as string, password: '', password_confirmation: '' });
 
     const submit = (e: FormEvent) => {
         e.preventDefault();

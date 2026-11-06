@@ -108,7 +108,7 @@ function Hero() {
                                 </span>
                                 <span className="text-xs">
                                     <span className="block text-[10px] text-muted-foreground">{t('Received')}</span>
-                                    <WordCycle words={visitorCountry() === 'AR' ? ['ARS 2.500.000', 'COP 8.000.000', 'USD 2.000'] : ['COP 8.000.000', 'ARS 2.500.000', 'USD 2.000']} interval={2400} className="font-bold" />
+                                    <WordCycle words={visitorCountry() === 'CO' ? ['COP 8.000.000', 'USD 2.000'] : ['ARS 2.500.000', 'USD 2.000']} interval={2400} className="font-bold" />
                                 </span>
                                 <span className="ml-auto rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">{t('Today')}</span>
                             </MockCard>

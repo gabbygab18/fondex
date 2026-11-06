@@ -18,8 +18,8 @@ export function useLocale() {
 }
 
 /** Visitor's country from the browser time zone, so Argentina sees ARS and Colombia sees COP first. No IP lookup. */
-export function visitorCountry(): 'AR' | 'CO' | undefined {
+export function visitorCountry(): 'AR' | 'CO' {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
-    if (tz.startsWith('America/Argentina') || tz === 'America/Buenos_Aires') return 'AR';
-    if (tz === 'America/Bogota') return 'CO';
+    // Anyone outside both countries sees Argentina, the main market (fondex.com.ar).
+    return tz === 'America/Bogota' ? 'CO' : 'AR';
 }

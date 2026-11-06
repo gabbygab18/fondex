@@ -14,7 +14,7 @@ import type { SharedProps } from '@/types';
 export default function Contact() {
     const { app } = usePage<SharedProps>().props;
     const t = useT();
-    const form = useForm({ name: '', email: '', phone: '', country: visitorCountry() ?? '', amount: '', message: '' });
+    const form = useForm({ name: '', email: '', phone: '', country: visitorCountry() as string, amount: '', message: '' });
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
