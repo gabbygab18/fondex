@@ -59,6 +59,29 @@ export function LanguageSwitch({ className, dark = false }: { className?: string
     );
 }
 
+/** Light/dark switch for the public site; the choice is remembered on this device. */
+function ThemeSwitch() {
+    const t = useT();
+    const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+    const flip = () => {
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+        document.documentElement.classList.toggle('dark', !dark);
+        setDark(!dark);
+    };
+    return (
+        <button
+            type="button"
+            onClick={flip}
+            aria-pressed={dark}
+            aria-label={dark ? t('Light mode') : t('Dark mode')}
+            title={dark ? t('Light mode') : t('Dark mode')}
+            className="grid size-9 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+        >
+            <Icon name={dark ? 'sun' : 'moon'} size={18} />
+        </button>
+    );
+}
+
 /** Nav sits inside the top of each page's rounded navy panel (the hero), like the reference design. */
 function Header() {
     const { app, auth } = usePage<SharedProps>().props;
@@ -90,6 +113,7 @@ function Header() {
                     ))}
                 </ul>
                 <div className="hidden items-center gap-3 lg:flex">
+                    <ThemeSwitch />
                     <LanguageSwitch dark />
                     <Link href={account} className="px-2 text-sm text-white/80 hover:text-white">
                         {auth.user ? t('My account') : t('Sign in')}
@@ -121,7 +145,10 @@ function Header() {
                     </Link>
                     <div className="mt-3 flex items-center justify-between">
                         <PillLink href="/apply">{t('Apply now')}</PillLink>
-                        <LanguageSwitch dark />
+                        <div className="flex items-center gap-2">
+                            <ThemeSwitch />
+                            <LanguageSwitch dark />
+                        </div>
                     </div>
                 </div>
             )}
@@ -183,6 +210,11 @@ function Footer() {
 export default function SiteLayout({ children }: { children: ReactNode }) {
     const { component } = usePage();
     const reduce = useReducedMotion();
+    // Dark mode is for the public site only: apply the saved choice here, drop it when leaving for the portal.
+    useEffect(() => {
+        document.documentElement.classList.toggle('dark', localStorage.getItem('theme') === 'dark');
+        return () => document.documentElement.classList.remove('dark');
+    }, []);
     return (
         <ToastProvider placement="top-center">
             <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">

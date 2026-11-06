@@ -27,6 +27,10 @@
         <meta name="twitter:description" content="{{ $seo['description'] }}">
         <meta name="twitter:image" content="{{ $seo['image'] }}">
 
+        @if (in_array($page['component'] ?? '', ['Home', 'About', 'Services', 'Faqs', 'Contact', 'Legal', 'Apply'], true))
+            {{-- Saved dark theme before first paint, so the public site doesn't flash light. --}}
+            <script>if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');</script>
+        @endif
         <script type="application/ld+json">{!! json_encode($seo['schema'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

@@ -3,6 +3,8 @@
 @source '../**/*.blade.php';
 @source '../js/**/*.{ts,tsx}';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
     font-family: 'Satoshi';
     src: url('../fonts/Satoshi-Variable.woff2') format('woff2');
@@ -133,4 +135,51 @@
     to {
         transform: translate(-6rem, 5rem) scale(1.15);
     }
+}
+
+/*
+ * Dark theme for the public site (toggle in the header; SiteLayout sets .dark on <html>).
+ * Tokens first, then the light surfaces that pages hardcode. Unlayered, so these beat the utilities.
+ */
+.dark {
+    color-scheme: dark;
+    --background: #06122a;
+    --foreground: #e6edf8;
+    --card: #0c1d3d;
+    --card-foreground: #e6edf8;
+    --popover: #0c1d3d;
+    --popover-foreground: #e6edf8;
+    --primary: #2563eb;
+    --secondary: #12305e;
+    --secondary-foreground: #d6e7ff;
+    --muted: #10264a;
+    --muted-foreground: #9fb0c9;
+    --border: #1b3461;
+    --input: #26426f;
+    --color-cream: #06122a;
+    --color-azure-soft: #12305e;
+}
+.dark .bg-white {
+    background-color: var(--card);
+}
+.dark .text-navy {
+    color: var(--foreground);
+}
+/* Navy text that sits on light azure stays navy. */
+.dark :is(.bg-azure, .bg-azure\/90).text-navy,
+.dark .bg-azure .text-navy,
+.dark .text-navy.on-light {
+    color: #0b2a5c;
+}
+.dark :is(.bg-\[\#f4f7fc\], .bg-\[\#eef4ff\], .bg-\[\#e8f0fe\], .bg-\[\#dce8fb\]) {
+    background-color: var(--muted);
+}
+.dark .from-\[\#c7dcf7\] {
+    --tw-gradient-from: #12305e;
+}
+.dark :is(.text-navy\/70, .text-navy\/75) {
+    color: rgb(230 237 248 / 0.7);
+}
+.dark .bg-azure :is(.text-navy\/70, .text-navy\/75, .text-muted-foreground) {
+    color: rgb(11 42 92 / 0.75);
 }
