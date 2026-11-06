@@ -174,12 +174,21 @@
 .dark :is(.bg-\[\#f4f7fc\], .bg-\[\#eef4ff\], .bg-\[\#e8f0fe\], .bg-\[\#dce8fb\]) {
     background-color: var(--muted);
 }
-.dark .from-\[\#c7dcf7\] {
-    --tw-gradient-from: #12305e;
-}
 .dark :is(.text-navy\/70, .text-navy\/75) {
     color: rgb(230 237 248 / 0.7);
 }
 .dark .bg-azure :is(.text-navy\/70, .text-navy\/75, .text-muted-foreground) {
     color: rgb(11 42 92 / 0.75);
+}
+/* Decorative rules beside the CTA panel read as stray lines on dark: drop them. */
+.dark .from-\[\#c7dcf7\] {
+    display: none;
+}
+/* Mockup cards: no bright white outline on dark. */
+.dark .border-white\/80 {
+    border-color: var(--border);
+}
+/* Empty radio circles: outlined, not filled with the page background. */
+.dark .ui-radio:not(:checked) {
+    background-color: transparent;
 }

@@ -5,7 +5,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/glint/radio-group';
 import { Slider } from '@/components/glint/slider';
 import { PillLink } from '@/components/site';
 import { FREQ_LABEL, FREQUENCIES, installment, installmentCount, money, PER_LABEL, RATES, totalPayable } from '@/lib/format';
-import { useT, visitorCountry } from '@/lib/i18n';
+import { localCountries, useT } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import type { Frequency, SharedProps } from '@/types';
 
@@ -25,9 +25,10 @@ const LOW = RATES[0];
 const HIGH = RATES[RATES.length - 1];
 
 export function LoanCalculator({ className }: { className?: string }) {
-    const { countries, locale } = usePage<SharedProps>().props;
+    const { locale, ...props } = usePage<SharedProps>().props;
+    const countries = localCountries(props.countries);
     const t = useT();
-    const [code, setCode] = useState(() => (countries.find((x) => x.code === visitorCountry()) ?? countries[0])?.code ?? 'CO');
+    const [code, setCode] = useState(() => countries[0]?.code ?? 'AR');
     const c = countries.find((x) => x.code === code) ?? countries[0];
     const step = c ? stepFor(c.max_amount) : 1;
     const [amount, setAmount] = useState(() => (c ? Math.round((c.max_amount * 0.2) / step) * step : 0));

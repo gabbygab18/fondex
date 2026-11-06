@@ -4,12 +4,13 @@ import { Glow, Hl, PageHero, PillLink, SectionHeading } from '@/components/site'
 import { Icon } from '@/icons/icon';
 import { siteLayout } from '@/Layouts/SiteLayout';
 import { money } from '@/lib/format';
-import { useT } from '@/lib/i18n';
+import { localCountries, useT } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types';
 
 export default function Services() {
-    const { countries, locale } = usePage<SharedProps>().props;
+    const { locale, ...props } = usePage<SharedProps>().props;
+    const countries = localCountries(props.countries);
     const t = useT();
 
     const products = [
@@ -132,7 +133,7 @@ export default function Services() {
                     >
                         {t('These are our current lending limits. Your final rate is confirmed when your application is approved.')}
                     </SectionHeading>
-                    <div className="mt-12 grid gap-6 md:grid-cols-2">
+                    <div className={cn('mt-12 grid gap-6', countries.length > 1 && 'md:grid-cols-2')}>
                         {countries.map((c) => (
                             <div key={c.code} className="rounded-[28px] border border-white/10 bg-white/5 p-8">
                                 <div className="flex items-center justify-between">
