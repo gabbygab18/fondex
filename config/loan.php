@@ -8,8 +8,9 @@ return [
     // Flat rates (% of principal) the admin chooses from when approving a loan.
     'rates' => [20, 25, 30, 35],
 
-    // Online payments: "sandbox" (built-in test checkout) until the client has a gateway account, then "stripe".
-    'gateway' => env('PAYMENT_GATEWAY', 'sandbox'),
+    // Online payments: "off" (no "Pay now"; staff record payments), "sandbox" (built-in test checkout, no real
+    // money: never on the live site, borrowers could mark loans paid) or "stripe".
+    'gateway' => env('PAYMENT_GATEWAY', 'off'),
     // Reminder texts: "log" writes them to storage/logs until an SMS account exists, "twilio" sends them.
     'sms' => [
         'driver' => env('SMS_DRIVER', 'log'),

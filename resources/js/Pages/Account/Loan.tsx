@@ -16,7 +16,7 @@ import { CreditOffer } from '@/components/Credit';
 import type { CreditSummary, Loan as L, SharedProps } from '@/types';
 
 export default function Loan() {
-    const { loan, locale, app, credit } = usePage<SharedProps & { loan: L; credit: CreditSummary }>().props;
+    const { loan, locale, app, credit, payOnline } = usePage<SharedProps & { loan: L; credit: CreditSummary; payOnline: boolean }>().props;
     const t = useT();
     const fmt = (v: number) => money(v, loan.currency, locale);
     const installments = loan.installments ?? [];
@@ -60,7 +60,7 @@ export default function Loan() {
                     </div>
                     <CreditOffer credit={credit} />
 
-                    {loan.status === 'active' && outstanding > 0 && (
+                    {payOnline && loan.status === 'active' && outstanding > 0 && (
                         <div className="relative overflow-hidden rounded-[24px] bg-navy p-7 text-white">
                             <span aria-hidden className="absolute -right-16 -top-16 size-56 rounded-full bg-azure/20 blur-3xl" />
                             <div className="relative flex flex-wrap items-center justify-between gap-6">

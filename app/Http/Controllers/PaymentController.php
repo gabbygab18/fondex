@@ -13,7 +13,7 @@ class PaymentController extends Controller
 {
     public function start(Request $request, Loan $loan)
     {
-        abort_unless($loan->user_id === $request->user()->id && $loan->status === 'active', 404);
+        abort_unless($loan->user_id === $request->user()->id && $loan->status === 'active' && config('loan.gateway') !== 'off', 404);
         $request->validate(['pay' => ['required', 'in:next,full']]);
 
         $next = $loan->nextInstallment();
@@ -26,7 +26,7 @@ class PaymentController extends Controller
 
     public function sandbox(Request $request, Loan $loan)
     {
-        abort_unless($loan->user_id === $request->user()->id, 404);
+        abort_unless($loan->user_id === $request->user()->id && config('loan.gateway') === 'sandbox', 404);
 
         return Inertia::render('Pay/Sandbox', [
             'loan' => $loan->only('id', 'reference', 'currency'),
@@ -37,7 +37,7 @@ class PaymentController extends Controller
 
     public function sandboxConfirm(Request $request, Loan $loan)
     {
-        abort_unless($loan->user_id === $request->user()->id, 404);
+        abort_unless($loan->user_id === $request->user()->id && config('loan.gateway') === 'sandbox', 404);
         // The signed URL is single-use: its signature becomes the payment's unique gateway reference.
         $ref = 'sandbox_'.substr($request->query('signature'), 0, 40);
         if (! Payment::where('gateway_ref', $ref)->exists()) {

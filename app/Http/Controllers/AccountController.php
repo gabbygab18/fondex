@@ -28,6 +28,7 @@ class AccountController extends Controller
         return Inertia::render('Account/Loan', [
             'loan' => $loan->load('installments', 'payments'),
             'credit' => $this->credit($request),
+            'payOnline' => config('loan.gateway') !== 'off',
         ]);
     }
 

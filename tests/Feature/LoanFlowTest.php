@@ -185,6 +185,11 @@ class LoanFlowTest extends TestCase
         $this->assertSame(300000.0, $loan->fresh()->amount_paid);
         // A tampered amount breaks the signature.
         $this->actingAs($borrower)->post(str_replace('amount=300000.00', 'amount=1.00', $url))->assertForbidden();
+        // With online payments off (the live default) there is no checkout, sandbox included.
+        config(['loan.gateway' => 'off']);
+        $this->actingAs($borrower)->post("/account/loans/{$loan->id}/pay", ['pay' => 'next'])->assertNotFound();
+        $this->actingAs($borrower)->post($url)->assertNotFound();
+        config(['loan.gateway' => 'sandbox']);
 
         // Staff payment for the rest closes the loan.
         $this->actingAs($admin)->post("/admin/loans/{$loan->id}/payments", ['amount' => $loan->fresh()->outstanding(), 'paid_on' => today()->toDateString(), 'method' => 'cash']);
