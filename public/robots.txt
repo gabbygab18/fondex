@@ -1,2 +1,24 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /pay
+
+# AI search and answer engines are welcome on the public pages.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /pay
+
+Sitemap: https://fondex.com.ar/sitemap.xml

@@ -16,7 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'Home');
 Route::inertia('/about', 'About');
 Route::inertia('/loans', 'Services');
-Route::inertia('/faqs', 'Faqs');
+Route::get('/faqs', fn () => \Inertia\Inertia::render('Faqs', ['faqs' => \App\Support\Seo::faqs()]));
+// For AI answer engines (llmstxt.org): what Fondex offers, from the live settings, in plain Markdown.
+Route::get('/llms.txt', fn () => response()->view('llms', [
+    'countries' => \App\Models\CountrySetting::where('is_active', true)->get(),
+    'faqs' => \App\Support\Seo::FAQS,
+])->header('Content-Type', 'text/plain; charset=utf-8'));
 Route::inertia('/contact', 'Contact');
 Route::inertia('/privacy', 'Legal', ['page' => 'privacy']);
 Route::inertia('/terms', 'Legal', ['page' => 'terms']);
