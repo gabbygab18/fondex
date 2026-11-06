@@ -41,7 +41,13 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', PasswordRule::defaults()],
         ]);
 
-        $user = User::create([...$data, 'locale' => app()->getLocale(), 'role' => 'borrower']);
+        $user = User::create([
+            ...$data,
+            'locale' => app()->getLocale(),
+            'role' => 'borrower',
+            // Signed up through a client's invite link (see CaptureReferral).
+            'referred_by' => User::where('referral_code', $request->cookie('ref'))->where('role', 'borrower')->value('id'),
+        ]);
         Auth::login($user);
         $request->session()->regenerate();
 

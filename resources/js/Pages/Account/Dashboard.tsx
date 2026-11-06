@@ -9,16 +9,18 @@ import { date, FREQ_LABEL, money } from '@/lib/format';
 import { LOAN_TYPE_LABEL } from '@/lib/labels';
 import { useT } from '@/lib/i18n';
 import { CreditOffer } from '@/components/Credit';
+import { QrCode, ShareButtons } from '@/components/QrShare';
 import type { Application, CreditSummary, Installment, Loan, SharedProps } from '@/types';
 
 interface Props extends SharedProps {
     applications: Application[];
     loans: (Loan & { installments: Installment[] })[];
     credit: CreditSummary;
+    invite: { url: string; joined: number };
 }
 
 export default function Dashboard() {
-    const { applications, loans, auth, locale, credit } = usePage<Props>().props;
+    const { applications, loans, auth, locale, credit, invite } = usePage<Props>().props;
     const t = useT();
 
     return (
@@ -97,6 +99,26 @@ export default function Dashboard() {
                             </ul>
                         )}
                     </div>
+
+                    <section className="grid items-center gap-6 rounded-3xl bg-card p-6 shadow-sm md:grid-cols-[1fr_auto] md:p-8">
+                        <div>
+                            <span className="grid size-11 place-items-center rounded-full bg-secondary text-navy">
+                                <Icon name="gift" size={20} />
+                            </span>
+                            <h2 className="mt-4 text-2xl font-bold text-navy">{t('Invite friends')}</h2>
+                            <p className="mt-1 max-w-lg text-sm text-muted-foreground">
+                                {t('Know someone who needs a loan? Share your link or let them scan your QR code.')}
+                            </p>
+                            <p className="mt-4 break-all rounded-xl bg-muted px-4 py-3 font-mono text-sm">{invite.url}</p>
+                            <div className="mt-4">
+                                <ShareButtons url={invite.url} text={t('I use Fondex for fast, clear personal loans. Apply here:')} />
+                            </div>
+                            {invite.joined > 0 && (
+                                <p className="mt-4 text-sm font-medium text-navy">{t(':n friends joined with your link', { n: invite.joined })}</p>
+                            )}
+                        </div>
+                        <QrCode value={invite.url} label={t('QR code for your invite link')} className="size-40 justify-self-center p-1 ring-1 ring-border" />
+                    </section>
             </div>
         </>
     );

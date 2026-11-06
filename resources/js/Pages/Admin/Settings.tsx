@@ -9,6 +9,7 @@ import { Icon } from '@/icons/icon';
 import { portalLayout } from '@/Layouts/PortalLayout';
 import { money, RATES } from '@/lib/format';
 import { useLocale, useT } from '@/lib/i18n';
+import { downloadQr, QrCode, ShareButtons } from '@/components/QrShare';
 import type { Country } from '@/types';
 
 function CountryForm({ setting }: { setting: Country }) {
@@ -93,6 +94,31 @@ function CountryForm({ setting }: { setting: Country }) {
     );
 }
 
+/** QR code that opens the application form: for flyers, the office counter or social posts. */
+function ApplyQr() {
+    const t = useT();
+    const url = `${window.location.origin}/apply`;
+    return (
+        <Panel title={t('QR code to apply')} className="mt-6">
+            <div className="grid items-center gap-6 md:grid-cols-[auto_1fr]">
+                <QrCode value={url} label={t('QR code to apply')} className="size-44 p-1 ring-1 ring-border" />
+                <div>
+                    <p className="text-sm text-muted-foreground">
+                        {t('Scanning it opens the loan application. Print it on flyers or post it on social media. New visitors are asked to create an account first.')}
+                    </p>
+                    <p className="mt-3 break-all font-mono text-sm">{url}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        <Button type="button" onClick={() => downloadQr(url, 'fondex-qr-apply.png')} startIcon={<Icon name="download" />}>
+                            {t('Download QR (PNG)')}
+                        </Button>
+                        <ShareButtons url={url} text={t('Apply for a Fondex loan here:')} />
+                    </div>
+                </div>
+            </div>
+        </Panel>
+    );
+}
+
 export default function Settings({ settings }: { settings: Country[] }) {
     const t = useT();
     return (
@@ -111,6 +137,7 @@ export default function Settings({ settings }: { settings: Country[] }) {
                     <CountryForm key={s.id} setting={s} />
                 ))}
             </div>
+            <ApplyQr />
         </>
     );
 }

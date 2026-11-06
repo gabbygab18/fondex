@@ -24,6 +24,8 @@ type Props = {
     loans: (Loan & { overdue_count: number; installments: Installment[] })[];
     payments: (Payment & { loan: { id: number; reference: string; currency: string } })[];
     credit: CreditSummary;
+    referrer: { id: number; name: string } | null;
+    referrals: { id: number; name: string; created_at: string }[];
 };
 
 /**
@@ -111,7 +113,7 @@ function AddExistingLoan({ clientId, currency }: { clientId: number; currency: s
     );
 }
 
-export default function ClientShow({ client, profile: p, applications, loans, payments, credit }: Props) {
+export default function ClientShow({ client, profile: p, applications, loans, payments, credit, referrer, referrals }: Props) {
     const t = useT();
     const locale = useLocale();
     const phone = client.phone ?? p?.phone ?? null;
@@ -177,6 +179,33 @@ export default function ClientShow({ client, profile: p, applications, loans, pa
                             </span>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {(referrer || referrals.length > 0) && (
+                <div className="mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-3xl bg-card p-5 text-sm shadow-sm">
+                    <Icon name="gift" size={20} className="text-[#2563eb]" />
+                    {referrer && (
+                        <span>
+                            {t('Invited by')}{' '}
+                            <Link href={`/admin/clients/${referrer.id}`} className="font-semibold text-[#2563eb] hover:underline">
+                                {referrer.name}
+                            </Link>
+                        </span>
+                    )}
+                    {referrals.length > 0 && (
+                        <span>
+                            {t('Invited :n friends:', { n: referrals.length })}{' '}
+                            {referrals.map((r, i) => (
+                                <span key={r.id}>
+                                    {i > 0 && ', '}
+                                    <Link href={`/admin/clients/${r.id}`} className="font-semibold text-[#2563eb] hover:underline">
+                                        {r.name}
+                                    </Link>
+                                </span>
+                            ))}
+                        </span>
+                    )}
                 </div>
             )}
 

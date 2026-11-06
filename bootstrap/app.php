@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Behind Cloudflare Tunnel (or any HTTPS proxy): honor X-Forwarded-Proto/Host so URLs come out as https.
         $middleware->trustProxies(at: '*');
-        $middleware->web(append: [SetLocale::class, HandleInertiaRequests::class]);
+        $middleware->web(append: [SetLocale::class, \App\Http\Middleware\CaptureReferral::class, HandleInertiaRequests::class]);
         $middleware->alias(['role' => EnsureRole::class]);
         $middleware->redirectUsersTo(fn ($request) => $request->user()->isStaff() ? '/admin' : '/account');
     })

@@ -102,6 +102,9 @@ class ClientController extends Controller
 
         return Inertia::render('Admin/Clients/Show', [
             'client' => $user->only('id', 'name', 'email', 'phone', 'country', 'is_active', 'created_at'),
+            // "Invite friends": who brought this client, and the clients they brought.
+            'referrer' => $user->referrer?->only('id', 'name'),
+            'referrals' => $user->referrals()->latest()->get(['id', 'name', 'created_at']),
             'credit' => CreditProfile::for($user)->summary(CountrySetting::firstWhere('code', $user->country)),
             // Profile comes from the most recent application, which holds the full KYC details;
             // for a client added by hand with no application yet, from the details staff entered.

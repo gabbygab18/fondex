@@ -18,6 +18,7 @@ class AccountController extends Controller
             'applications' => $user->applications()->latest()->get(),
             'loans' => $user->loans()->latest()->with(['installments' => fn ($q) => $q->whereColumn('amount_paid', '<', 'amount_due')->limit(1)])->get(),
             'credit' => $this->credit($request),
+            'invite' => ['url' => $user->inviteUrl(), 'joined' => $user->referrals()->count()],
         ]);
     }
 
