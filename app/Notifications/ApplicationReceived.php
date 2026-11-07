@@ -19,7 +19,7 @@ class ApplicationReceived extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $a = $this->application;
-        $amount = $a->currency.' '.number_format($a->amount, 2);
+        $amount = $a->currency.' '.number_format($a->amount, 0, ',', '.');
 
         if ($this->forAdmin) {
             return (new MailMessage)

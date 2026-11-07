@@ -36,8 +36,8 @@ class PaymentReminder extends Notification
     {
         $i = $this->installment;
         $loan = $i->loan;
-        $amount = $loan->currency.' '.number_format($i->amount_due - $i->amount_paid, 2);
-        $date = $i->due_date->toDateString();
+        $amount = $loan->currency.' '.number_format($i->amount_due - $i->amount_paid, 0, ',', '.');
+        $date = $i->due_date->format('d/m/Y');
 
         $mail = (new MailMessage)->greeting(__('Hello :name,', ['name' => $notifiable->name]));
 
